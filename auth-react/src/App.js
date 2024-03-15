@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import './App.css';
 import { auth } from './firebase-config';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword,
+         onAuthStateChanged,
+         signOut,
+         signInWithEmailAndPassword } from 'firebase/auth'
 
 
 function App() {
@@ -24,22 +27,16 @@ function App() {
     }
     const login = async () => {
       try {
-        const user = await onAuthStateChanged(auth, loginEmail, loginPassword);
+        const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
         console.log(user)
       } catch (error) {
         console.log(error.message)
       }
     }
 
-    const signOut = async () => {
-      try {
-        const user = await signOut(auth);
-        console.log(user)
-      } catch (error) {
-        console.log(error.message)
-      }
-    }
-
+    const logout = async () => {
+      await signOut(auth);
+    };
 
   return (
     <div className='App'>
@@ -72,10 +69,10 @@ function App() {
       </div>
 
       <h4>User Logged In:</h4>
-      {user.email}
+      {user?.email}
 
 
-      <button onClick={signOut}>signOut</button>
+      <button onClick={logout}>signOut</button>
 
 
     </div>
